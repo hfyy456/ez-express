@@ -30,11 +30,8 @@ router.post('/uploadToken', jsonParser, (req, res) => {
     if (token) {
         res.json({
             code: 20000,
-            data: {
-                token: token,
-                domain: config.Domain
-            },
-            message: "获取成功"
+            data: {},
+            message: "创建成功!!"
         })
 
     }

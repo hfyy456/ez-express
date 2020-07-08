@@ -11,7 +11,7 @@ const articleSchema = new Schema({
   oUrl: String,
   image: String,
   blog: String,
-  createTime: Date
+  createTime: Date  
 },
   {
     runSettersOnQuery: true // 查询时是否执行 setters

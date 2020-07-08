@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const mongodbConfig = require('./config').mongodb
+const mongodbConfig = require('../config').mongodb
 
 function getMongoUrl() {
   let mongoUrl = 'mongodb://';
