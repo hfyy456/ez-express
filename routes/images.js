@@ -15,45 +15,54 @@ const config = {
     "UptokenUrl": "uptoken"
 }
 var mac = new qiniu.auth.digest.Mac(config.AccessKey, config.SecretKey);
-var putExtra = new qiniu.form_up.PutExtra();
 var options = {
     scope: config.Bucket,
     returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
 }
 var putPolicy = new qiniu.rs.PutPolicy(options);
-var bucketManager = new qiniu.rs.BucketManager(mac, config);
 router.post('/uploadToken', jsonParser, (req, res) => {
+    console.log('sss')
     var token = putPolicy.uploadToken(mac);
+    console.log(token)
     res.header("Cache-Control", "max-age=0, private, must-revalidate")
     res.header("Pragma", "no-cache")
     res.header("Expires", 0)
     if (token) {
         res.json({
             code: 20000,
-            data: {},
-            message: "创建成功!!"
+            data: token,
+            message: "Created successfully!!"
         })
 
+    } else {
+        res.json({
+            code: 5000
+        })
     }
 })
 router.post('/create', jsonParser, (req, res) => {
-    console.log(req.body)
-    let username = req.body.username // 前端请求头用json发送的话用 req.query 或者 req.params
+    const username = req.user.username
+    const list = req.body.list
+    let promises = []
     console.log(username)
-    //接收不到就下载一个y插件来解析
-    let password = req.body.password
-    userdao.findOne({ username: username }).then((result) => {
-        console.log('findOne dao --> ', result)
-        if (result) {
-            console.log('密码为:' + result.password)
-            if (password == result.password) {
-                res.send('登陆成功')//登录成功，返回token
-            } else {
-                res.send('密码错误')
-            }
-        } else {
-            res.send('账号不存在')
-        }
-    });
+    for (const item of list) {
+        let param = { url: item, author: username }
+        let promise = imagedao.save(param)
+        promises.push(promise)
+    }
+    Promise.all(promises).then(res => {
+        res.json({
+            code: 20000,
+            data: {},
+            message: "ALL created successfully!!"
+        })
+    }).catch(e => {
+        res.json({
+            code: 50000,
+            data: {},
+            message: "created failed!!"
+        })
+    })
+
 })
 module.exports = router;
