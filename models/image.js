@@ -6,7 +6,12 @@ const imageSchema = new Schema({
     type: Date,
     default: new Date()
   },
-  author: String
+  width: Number,
+  author: String,
+  per: {
+    type: Number,
+    default: 0
+  },
 },
   {
     versionKey: false,

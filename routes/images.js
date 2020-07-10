@@ -2,7 +2,8 @@ var express = require('express');
 var qiniu = require('qiniu');
 const Image = require('../models/image')
 const ImageDao = require('../models/dao/imageDao');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+const { route } = require('./articles');
 // create application/json parser
 var jsonParser = bodyParser.json()
 var router = express.Router();
@@ -46,7 +47,7 @@ router.post('/create', jsonParser, (req, res) => {
     let promises = []
     console.log(username)
     for (const item of list) {
-        let param = { url: item, author: username }
+        let param = { url: item.url, author: username, width: item.width }
         let promise = imagedao.save(param)
         promises.push(promise)
     }
@@ -64,5 +65,22 @@ router.post('/create', jsonParser, (req, res) => {
         })
     })
 
+})
+router.post('/findByAuthor', jsonParser, (req, res) => {
+    const username = req.user.username
+    imagedao.findAll({ author: username }).then(result => {
+        res.json({
+            code: 20000,
+            message: 'success',
+            data: result
+        })
+
+    }).catch(e => {
+        res.json({
+            code: 50000,
+            message: 'failed',
+            data: {}
+        })
+    })
 })
 module.exports = router;
