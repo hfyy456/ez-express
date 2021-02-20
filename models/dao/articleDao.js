@@ -1,4 +1,4 @@
-const BaseDao = require('./basedao')
+const BaseDao = require('./baseDao')
 const Article = require('../article')
 
 class ArticleDao extends BaseDao {

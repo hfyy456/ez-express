@@ -1,6 +1,6 @@
 var express = require('express');
 const User = require('../models/user')
-const UserDao = require('../models/dao/userdao');
+const UserDao = require('../models/dao/userDao');
 const sign = require('../utils/jwt')
 var bodyParser = require('body-parser')
 // create application/json parser
