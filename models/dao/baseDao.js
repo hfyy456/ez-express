@@ -123,16 +123,19 @@ class BaseDao {
     }
 
     /**
-   * 查找分页
-   * @param pageSize
-   * @param pageNum
-   * @returns {Promise}
-   */
+     * 查找分页
+     * @param pageSize
+     * @param pageNum
+     * @returns {Promise}
+     */
     findAllByPage(pageSize, pageNum) {
         return new Promise((resolve, reject) => {
             this.Model.find()
                 .limit(pageSize)
                 .skip(pageSize * pageNum)
+                .sort({
+                    "createTime": -1
+                })
                 .exec(function (err, record) {
                     if (err) {
                         reject(err);

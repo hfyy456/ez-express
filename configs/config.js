@@ -9,6 +9,6 @@ module.exports = {
   "jwt": {
     algorithms: ["HS256"],
     secret: 'key',
-    whiteList: ['/api/user/login', '/api/user/regist', '/api/user/email', '/api/user/username', '/profile']
+    whiteList: ['/api/user/login', '/api/user/regist', '/api/user/email', '/api/user/username', '/profile', '/api/article/list', '/api/article/create', '/api/article/item']
   }
 }
