@@ -154,9 +154,10 @@ class BaseDao {
      * @param updater 更新操作
      * @returns {Promise}
      */
-    update(condition, updater) {
+    updateOne(condition, updater) {
         return new Promise((resolve, reject) => {
-            this.Model.update(condition, updater, (error, results) => {
+            console.log(condition,updater)
+            this.Model.updateOne(condition, updater, (error, results) => {
                 if (error) {
                     console.log('update error--> ', error);
                     reject(error);
@@ -165,7 +166,7 @@ class BaseDao {
                     resolve(results);
                 }
             });
-        });
+        })
     }
 
 

@@ -10,7 +10,10 @@ var userdao = new UserDao()
 router.post('/login', jsonParser, (req, res) => {
     console.log(req.body)
     let params = req.body
-    userdao.findOne(params, limit = { password: 0, _id: 0 }).then((result) => {
+    userdao.findOne(params, limit = {
+        password: 0,
+        _id: 0
+    }).then((result) => {
         console.log('findOne dao --> ', result)
         if (result) {
             let data = result
@@ -31,6 +34,39 @@ router.post('/login', jsonParser, (req, res) => {
 
     })
 })
+router.post('/update', jsonParser, (req, res) => {
+    let params = req.body
+    console.log(params)
+    let username = params.username
+    userdao.updateOne({
+        username: username
+    }, {
+        '$set': params
+    }).then((result) => {
+        console.log('update dao --> ', result)
+        if (result) {
+            userdao.findOne({
+                username: username
+            }, limit = {
+                password: 0,
+                _id: 0
+            }).then(result => {
+                res.json({
+                    code: 20000,
+                    data: result,
+                    message: "update successfully."
+                })
+            })
+
+        } else {
+            res.json({
+                code: 50000,
+                data: {},
+                message: "unknow error."
+            })
+        }
+    });
+})
 
 router.post('/regist', jsonParser, (req, res) => {
     let params = req.body
@@ -38,7 +74,10 @@ router.post('/regist', jsonParser, (req, res) => {
     userdao.save(params).then((result) => {
         console.log('Save dao --> ', result)
         if (result) {
-            userdao.findOne(result, limit = { password: 0, _id: 0 }).then(result => {
+            userdao.findOne(result, limit = {
+                password: 0,
+                _id: 0
+            }).then(result => {
                 res.json({
                     code: 20000,
                     data: result,
@@ -59,7 +98,9 @@ router.post('/regist', jsonParser, (req, res) => {
 router.post('/email', jsonParser, (req, res) => {
     let params = req.body
     let email = params.email
-    userdao.findOne({ email: email }).then((result) => {
+    userdao.findOne({
+        email: email
+    }).then((result) => {
         console.log('findOne dao --> ', result)
         if (!result) {
             res.json({
@@ -79,13 +120,18 @@ router.post('/email', jsonParser, (req, res) => {
 router.post('/info', jsonParser, (req, res) => {
     console.log(req.user)
     console.log(req.user.username)
-    userdao.findOne({ username: req.user.username }, limit = { password: 0, _id: 0 }).then((result) => {
+    userdao.findOne({
+        username: req.user.username
+    }, limit = {
+        password: 0,
+        _id: 0
+    }).then((result) => {
         console.log('findOne asdasdasdao --> ', result)
         if (result) {
             res.json({
                 code: 20000,
                 data: result,
-                message: "Get user infomation successfull"
+                message: "Get user infomation successfully"
             })
         } else {
             res.json({
@@ -99,7 +145,9 @@ router.post('/info', jsonParser, (req, res) => {
 router.post('/username', jsonParser, (req, res) => {
     let params = req.body
     let username = params.username
-    userdao.findOne({ username: username }).then((result) => {
+    userdao.findOne({
+        username: username
+    }).then((result) => {
         console.log('findOne dao --> ', result)
         if (!result) {
             res.json({
