@@ -51,19 +51,29 @@ router.post('/item', jsonParser, (req, res) => {
     articledao.findOne({
         "_id": _id
     }).then((results) => {
-        if (results) {
-            res.json({
-                code: 20000,
-                data: results,
-                message: "获取成功!!"
-            })
-        } else {
-            res.json({
-                code: 50000,
-                data: {},
-                message: "获取失败!!"
-            })
-        }
+        articledao.updateOne({
+            "_id": _id
+        }, {
+            '$set': {
+                visits: results['visits'] + 1
+            }
+        }).then(result => {
+            if (results) {
+                res.json({
+                    code: 20000,
+                    data: results,
+                    message: "获取成功!!"
+                })
+            } else {
+                res.json({
+                    code: 50000,
+                    data: {},
+                    message: "获取失败!!"
+                })
+            }
+        })
+
+
     })
 })
 module.exports = router;
