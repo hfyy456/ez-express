@@ -16,8 +16,8 @@ const articleSchema = new Schema({
     default: new Date()
   },
   categories: {
-    type:Array,
-    default:[],
+    type: Array,
+    default: [],
   },
   commentCount: {
     default: 0,
@@ -34,8 +34,8 @@ const articleSchema = new Schema({
     type: Number
   },
   priority: {
-    default:0,
-    type:Number
+    default: 0,
+    type: Number
   },
 }, {
   runSettersOnQuery: true // 查询时是否执行 setters
