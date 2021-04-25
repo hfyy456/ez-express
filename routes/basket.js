@@ -1,5 +1,5 @@
 var express = require('express');
-const User = require('../models/user')
+const Basket = require('../models/basket')
 const BaksetDao = require('../models/dao/basketDao');
 const sign = require('../utils/jwt')
 var bodyParser = require('body-parser')
