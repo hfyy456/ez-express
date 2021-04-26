@@ -13,6 +13,7 @@ var articlesRouter = require('./routes/articles');
 var imagesRouter = require('./routes/images');
 var basketRouter = require('./routes/basket');
 
+var orderRouter = require('./routes/order');
 
 
 app.all('*', function (req, res, next) {
@@ -42,7 +43,7 @@ app.use('/api/user', usersRouter);
 app.use('/api/article', articlesRouter);
 app.use('/api/image', imagesRouter);
 app.use('/api/basket', basketRouter);
-
+app.use('/api/order', orderRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
