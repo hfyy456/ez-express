@@ -94,7 +94,7 @@ router.post("/pay", jsonParser, (req, res) => {
             var finalData = JSON.parse(data)
             var remain = finalData.remain
             console.log(remain, order.finalPrice)
-            if (remain > order.finalPrice) {
+            if (remain >= order.finalPrice) {
                 remain = remain - order.finalPrice
                 orderdao.findOne({
                     _id: order._id
@@ -103,22 +103,26 @@ router.post("/pay", jsonParser, (req, res) => {
                         var data = JSON.stringify(result)
                         var orderData = JSON.parse(data)
                         if (orderData.state == 'created' && order.payway == "remain") {
+                            console.log(req.user.username, order._id)
+                            var usr = req.user.username
                             var userP = userdao.updateOne({
-                                username: req.user.username
+                                username: usr
                             }, {
-                                '$set': { remain: remain }
+                                "$set": { "remain": remain }
+                            }).then(res => {
+                                console.log(res)
                             })
                             var orderP = orderdao.updateOne({
                                 _id: order._id
                             }, {
-                                '$set': { state: "finished" }
+                                "$set": { "state": "finished" }
                             })
                             let proms = [userP, orderP]
-                            Promise.all(proms).then(res => {
-                                console.log(res)
+                            Promise.all(proms).then(fin => {
+                                console.log(fin)
                                 res.json({
                                     code: 20000,
-                                    data: {},
+                                    data: fin,
                                     message: "支付成功"
                                 })
                             })

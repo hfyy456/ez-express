@@ -9,8 +9,9 @@ const orderSchema = new Schema({
     desc: String,
     num: Number,
     owner: String,
+    type: String,
     voucherId: String,
-    created: {
+    state: {
         type: String,
         default: "created",
     },
