@@ -5,6 +5,26 @@ var jsonParser = bodyParser.json()
 var router = express.Router();
 var gooddao = new GoodDao()
 
+router.post('/list', jsonParser, (req, res) => {
+    console.log(req.user.username)
+    gooddao.findAll({
+        owner: req.user.username
+    }).then((result) => {
+        if (result) {
+            res.json({
+                code: 20000,
+                data: result,
+                message: "查询成功"
+            })
+        } else {
+            res.json({
+                code: 50000,
+                data: result,
+                message: "查询失败"
+            })
+        }
+    })
+})
 router.post('/info', jsonParser, (req, res) => {
     console.log(req.user)
     console.log(req.user.username)

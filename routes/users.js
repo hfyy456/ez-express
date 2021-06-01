@@ -34,6 +34,8 @@ router.post('/login', jsonParser, (req, res) => {
 
     })
 })
+
+
 router.post('/update', jsonParser, (req, res) => {
     let params = req.body
     console.log(params)

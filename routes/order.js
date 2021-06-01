@@ -1,6 +1,8 @@
 var express = require('express');
 const OrderDao = require('../models/dao/orderDao');
 const GoodDao = require('../models/dao/goodDao');
+const FlashSaleDao = require('../models/dao/flashDao');
+
 var bodyParser = require('body-parser');
 const UserDao = require('../models/dao/userDao');
 // create application/json parser
@@ -8,51 +10,99 @@ var jsonParser = bodyParser.json()
 var router = express.Router();
 var orderdao = new OrderDao()
 var gooddao = new GoodDao()
+
 var userdao = new UserDao()
+var flashdao = new FlashSaleDao()
 router.post('/create', jsonParser, (req, res) => {
     let params = req.body
     params.owner = req.user.username
     const goodId = params.id
-    gooddao.findOne({
-        _id: goodId
-    }, limit = {
-        _id: 0
-    }).then((result) => {
-        console.dir('findOne gooddao --> ', result)
-        if (result) {
-            var data = JSON.stringify(result)
-            var finalData = JSON.parse(data)
-            var order = {
-                ...finalData,
-                cover: finalData.images[0],
-                goodId: goodId,
-                num: params.num,
-                owner: params.owner
-            }
-            orderdao.save(order).then((fin) => {
-                console.log(fin)
-                if (fin) {
-                    res.json({
-                        code: 20000,
-                        data: fin,
-                        message: "创建成功!!"
-                    })
-                } else {
-                    res.json({
-                        code: 50000,
-                        data: {},
-                        message: "创建失败!!"
-                    })
+    const type = params.type
+    console.log(type)
+    if (type == "flash") {
+        flashdao.findOne({
+            goodId: goodId
+        }, limit = {
+            _id: 0
+        }).then((result) => {
+            console.dir('findOne gooddao --> ', result)
+            if (result) {
+                var data = JSON.stringify(result)
+                var finalData = JSON.parse(data)
+                var order = {
+                    ...finalData,
+                    cover: finalData.cover,
+                    goodId: goodId,
+                    num: params.num,
+                    owner: params.owner
                 }
-            })
-        } else {
-            res.json({
-                code: 50000,
-                data: {},
-                message: "Good ins't exist"
-            })
-        }
-    })
+                orderdao.save(order).then((fin) => {
+                    console.log(fin)
+                    if (fin) {
+                        res.json({
+                            code: 20000,
+                            data: fin,
+                            message: "创建成功!!"
+                        })
+                    } else {
+                        res.json({
+                            code: 50000,
+                            data: {},
+                            message: "创建失败!!"
+                        })
+                    }
+                })
+            } else {
+                res.json({
+                    code: 50000,
+                    data: {},
+                    message: "Good ins't exist"
+                })
+            }
+        })
+    } else {
+        gooddao.findOne({
+            _id: goodId
+        }, limit = {
+            _id: 0
+        }).then((result) => {
+            console.dir('findOne gooddao --> ', result)
+            if (result) {
+                var data = JSON.stringify(result)
+                var finalData = JSON.parse(data)
+                var order = {
+                    ...finalData,
+                    cover: finalData.images[0],
+                    goodId: goodId,
+                    num: params.num,
+                    owner: params.owner
+                }
+                orderdao.save(order).then((fin) => {
+                    console.log(fin)
+                    if (fin) {
+                        res.json({
+                            code: 20000,
+                            data: fin,
+                            message: "创建成功!!"
+                        })
+                    } else {
+                        res.json({
+                            code: 50000,
+                            data: {},
+                            message: "创建失败!!"
+                        })
+                    }
+                })
+            } else {
+                res.json({
+                    code: 50000,
+                    data: {},
+                    message: "Good ins't exist"
+                })
+            }
+        })
+    }
+
 })
 
 router.post('/info', jsonParser, (req, res) => {
@@ -135,7 +185,7 @@ router.post("/pay", jsonParser, (req, res) => {
                             var orderP = orderdao.updateOne({
                                 _id: order._id
                             }, {
-                                "$set": { "state": "finished" }
+                                "$set": { "state": "payed", "phoneNumber": req.body.phoneNumber, "location": req.body.location }
                             })
                             let proms = [userP, orderP]
                             Promise.all(proms).then(fin => {
