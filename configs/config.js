@@ -2,9 +2,9 @@ module.exports = {
   "mongodb": {
     "user": "root",
     "pass": "root",
-    "host": "49.235.123.41",
+    "host": "106.12.117.164",
     "port": "32323",
-    "db": "epitome"
+    "db": "blog"
   },
   "jwt": {
     algorithms: ["HS256"],
