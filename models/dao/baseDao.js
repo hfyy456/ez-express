@@ -5,9 +5,8 @@ class BaseDao {
      * @param Model
      */
     constructor(Model) {
-        this.Model = Model;
+        this.Model = Model
     }
-
 
     /**
      * 使用 Model 的 静态方法 create() 添加 doc
@@ -17,19 +16,18 @@ class BaseDao {
      */
     create(obj) {
         return new Promise((resolve, reject) => {
-            let entity = new this.Model(obj);
+            let entity = new this.Model(obj)
             this.Model.create(entity, (error, result) => {
                 if (error) {
-                    console.log('create error--> ', error);
-                    reject(error);
+                    console.log("create error--> ", error)
+                    reject(error)
                 } else {
-                    console.log('create result--> ', result);
+                    console.log("create result--> ", result)
                     resolve(result)
                 }
-            });
-        });
+            })
+        })
     }
-
 
     /**
      * 使用 Model save() 添加 doc
@@ -39,19 +37,18 @@ class BaseDao {
      */
     save(obj) {
         return new Promise((resolve, reject) => {
-            let entity = new this.Model(obj);
+            let entity = new this.Model(obj)
             entity.save((error, result) => {
                 if (error) {
-                    console.log('save error--> ', error);
-                    reject(error);
+                    console.log("save error--> ", error)
+                    reject(error)
                 } else {
-                    console.log('save result--> ', result);
+                    console.log("save result--> ", result)
                     resolve(result)
                 }
-            });
-        });
+            })
+        })
     }
-
 
     /**
      * 查询所有符合条件 docs
@@ -62,18 +59,22 @@ class BaseDao {
      */
     findAll(condition, constraints) {
         return new Promise((resolve, reject) => {
-            this.Model.find(condition, constraints ? constraints : null, (error, results) => {
-                if (error) {
-                    console.log('findAll error--> ', error);
-                    reject(error);
-                } else {
-                    console.log('findAll results--> ', results);
-                    resolve(results);
+            console.log(condition, constraints)
+            this.Model.find(
+                condition,
+                constraints ? constraints : null,
+                (error, results) => {
+                    if (error) {
+                        console.log("findAll error--> ", error)
+                        reject(error)
+                    } else {
+                        console.log("findAll results--> ", results)
+                        resolve(results)
+                    }
                 }
-            });
-        });
+            )
+        })
     }
-
 
     /**
      * 查找符合条件的第一条 doc
@@ -84,18 +85,22 @@ class BaseDao {
      */
     findOne(condition, constraints, limit) {
         return new Promise((resolve, reject) => {
-            this.Model.findOne(condition, constraints ? constraints : null, limit ? limit : null, (error, results) => {
-                if (error) {
-                    console.log('findOne error--> ', error);
-                    reject(error);
-                } else {
-                    console.log('findOne results--> ', results);
-                    resolve(results);
+            this.Model.findOne(
+                condition,
+                constraints ? constraints : null,
+                limit ? limit : null,
+                (error, results) => {
+                    if (error) {
+                        console.log("findOne error--> ", error)
+                        reject(error)
+                    } else {
+                        console.log("findOne results--> ", results)
+                        resolve(results)
+                    }
                 }
-            });
-        });
+            )
+        })
     }
-
 
     /**
      * 查找排序之后的第一条
@@ -109,17 +114,17 @@ class BaseDao {
         return new Promise((resolve, reject) => {
             this.Model.findOne(condition)
                 .sort({
-                    [orderColumn]: orderType
+                    [orderColumn]: orderType,
                 })
                 .exec(function (err, record) {
-                    console.log(record);
+                    console.log(record)
                     if (err) {
-                        reject(err);
+                        reject(err)
                     } else {
-                        resolve(record);
+                        resolve(record)
                     }
-                });
-        });
+                })
+        })
     }
 
     /**
@@ -134,18 +139,17 @@ class BaseDao {
                 .limit(pageSize)
                 .skip(pageSize * pageNum)
                 .sort({
-                    "createTime": -1
+                    createTime: -1,
                 })
                 .exec(function (err, record) {
                     if (err) {
-                        reject(err);
+                        reject(err)
                     } else {
-                        resolve(record);
+                        resolve(record)
                     }
-                });
-        });
+                })
+        })
     }
-
 
     /**
      * 更新 docs
@@ -156,19 +160,18 @@ class BaseDao {
      */
     updateOne(condition, updater) {
         return new Promise((resolve, reject) => {
-            console.log(condition,updater)
+            console.log(condition, updater)
             this.Model.updateOne(condition, updater, (error, results) => {
                 if (error) {
-                    console.log('update error--> ', error);
-                    reject(error);
+                    console.log("update error--> ", error)
+                    reject(error)
                 } else {
-                    console.log('update results--> ', results);
-                    resolve(results);
+                    console.log("update results--> ", results)
+                    resolve(results)
                 }
-            });
+            })
         })
     }
-
 
     /**
      * 移除 doc
@@ -180,16 +183,15 @@ class BaseDao {
         return new Promise((resolve, reject) => {
             this.Model.remove(condition, (error, result) => {
                 if (error) {
-                    console.log('remove error--> ', error);
-                    reject(error);
+                    console.log("remove error--> ", error)
+                    reject(error)
                 } else {
-                    console.log('remove result--> ', result);
-                    resolve(result);
+                    console.log("remove result--> ", result)
+                    resolve(result)
                 }
-            });
-        });
+            })
+        })
     }
 }
 
-
-module.exports = BaseDao;
+module.exports = BaseDao
